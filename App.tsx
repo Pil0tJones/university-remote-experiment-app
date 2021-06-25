@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState, useRef } from 'react';
-import { AppState, AppRegistry } from 'react-native';
+import { AppState, AppRegistry, NativeModules } from 'react-native';
 import { Provider } from 'react-redux'
 import { store } from './src/redux/store'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
@@ -11,10 +11,7 @@ import { PrivacyScreen } from './src/views/PrivacyScreen';
 import { PreVideoScreen } from './src/views/PreVideoScreen';
 import { QuestionScreen } from './src/views/QuestionScreen';
 
-const LogScreen = async () => {
-  console.log('screen state changed');
-}
-AppRegistry.registerHeadlessTask('LogScreen', () => LogScreen);
+
 
 declare const global: { HermesInternal: null | {} };
 const Stack = createStackNavigator();
@@ -35,28 +32,9 @@ const MyTheme = {
 
 const App = () => {
 
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-  useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange);
+  NativeModules.ScreenListenerModule.startScreenChangeService()
 
-    return () => {
-      AppState.removeEventListener("change", _handleAppStateChange);
-    };
-  }, []);
-
-  const _handleAppStateChange = (nextAppState: any) => {
-    if (
-      appState.current.match(/inactive|background/) &&
-      nextAppState === "active"
-    ) {
-      console.log("App has come to the foreground!");
-    }
-
-    appState.current = nextAppState;
-    setAppStateVisible(appState.current);
-  };
 
   return (
     <Provider store={store}>
