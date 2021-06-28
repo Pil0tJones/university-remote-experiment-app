@@ -11,14 +11,15 @@ import java.sql.Timestamp
 
 class ScreenStateInfo(
         @field:SerializedName("screenState") val screenState: String,
-        @field:SerializedName("timestamp") val timestamp: Timestamp
+        @field:SerializedName("timestamp") val timestamp: Timestamp,
+        @field:SerializedName("user_id") val user_id: String
 )
 
 
 
 private val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("https://05d059e5970c.ngrok.io")
+        .baseUrl("http://595fb39b3ebb.ngrok.io")
         .build()
 
 

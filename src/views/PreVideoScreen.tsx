@@ -20,7 +20,7 @@ export const PreVideoScreen = ({ navigation }) => {
             <View style={styles.buttonsWrapper}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('Question1')
+                        navigation.navigate('PostVideoScreen')
                     }}
                     style={styles.buttonContainer}
                 >

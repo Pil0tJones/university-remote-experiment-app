@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AlarmClock from "react-native-alarm-clock";
+import ReactNativeAN from 'react-native-alarm-notification';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserState } from '../redux/user/user.types';
 import { userCreationRequest } from '../redux/user/user.actions'
@@ -11,19 +13,10 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-
-
 export const IntroScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const userState: UserState = useSelector(state => state.userState)
-
-    // const registerUser = () => {
-    //     if(!userState.id) {
-    //         const userId = + new Date;
-    //         dispatch(userCreationRequest(userId.toString(), true, 21))
-    //     }
-    // }
-
+    
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
@@ -44,7 +37,7 @@ export const IntroScreen = ({ navigation }) => {
             <View style={styles.buttonsWrapper}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('PrivacyScreen')                    
+                        navigation.navigate('PrivacyScreen')
                     }}
                     style={styles.buttonContainer}>
                     <LinearGradient style={styles.gradient} colors={['#38B0C0', '#27D6EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>

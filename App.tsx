@@ -9,6 +9,7 @@ import { IntroScreen } from './src/views/IntroScreen';
 import { DemographicsScreen } from './src/views/DemographicsScreen';
 import { PrivacyScreen } from './src/views/PrivacyScreen';
 import { PreVideoScreen } from './src/views/PreVideoScreen';
+import { PostVideoSreen } from './src/views/PostVideoScreen';
 import { QuestionScreen } from './src/views/QuestionScreen';
 
 
@@ -33,7 +34,7 @@ const MyTheme = {
 const App = () => {
 
 
-  NativeModules.ScreenListenerModule.startScreenChangeService()
+
 
 
   return (
@@ -58,6 +59,11 @@ const App = () => {
           <Stack.Screen
             name="PreVideoScreen"
             component={PreVideoScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PostVideoScreen"
+            component={PostVideoSreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

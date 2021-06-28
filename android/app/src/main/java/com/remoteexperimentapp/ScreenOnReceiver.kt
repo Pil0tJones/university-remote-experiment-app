@@ -3,6 +3,7 @@ package com.remoteexperimentapp
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import com.remoteexperimentapp.network.ExperimentApi
@@ -11,10 +12,18 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 
+
 class ScreenOnReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
+
+
+
+
+
+
         val timestamp = Timestamp(System.currentTimeMillis())
         if(intent!!.action == Intent.ACTION_SCREEN_ON) {
+            val user_id = this.context.getSharedPreferences()
             val screenStateInfo = ScreenStateInfo(
                     screenState = "on",
                     timestamp = timestamp
