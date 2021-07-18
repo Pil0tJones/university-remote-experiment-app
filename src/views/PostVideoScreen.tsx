@@ -4,12 +4,12 @@ import { UserState } from '../redux/user/user.types'
 import ReactNativeAN from 'react-native-alarm-notification';
 import BackgroundTimer from 'react-native-background-timer';
 import { NativeModules } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import Orientation from 'react-native-orientation';
+import { Headline } from './partials/headline/headline'
+import { MainButton } from './partials/buttons/mainButton';
 import {
     StyleSheet,
     View,
-    TouchableOpacity,
-    Text
 } from 'react-native';
 
 
@@ -20,34 +20,28 @@ export const PostVideoSreen = ({ navigation }) => {
 
 
     useEffect(() => {
-        NativeModules.ScreenListenerModule.startScreenChangeService(userState.id)
+        Orientation.lockToPortrait();
         scheduleAlarm();
         return () => {
-            NativeModules.ScreenListenerModule.stopScreenChangeService()
+            NativeModules.ScreenListenerModule.stopScreenChangeService();
         }
     }, [])
 
 
 
     const scheduleAlarm = async () => {
-        const fireDate = ReactNativeAN.parseDate(new Date(Date.now() + 15000));     // set the fire date for 1 second from now
-
+        const fireDate = ReactNativeAN.parseDate(new Date(Date.now() + 60000));     // set the fire date for 1 second from now
         const alarmNotifData = {
-            title: "Your Pause Is Finished",
-            message: "Please return to the app and continue with the questionnaire",
+            title: "Ihre Pause ist zu ende",
+            message: "Bitte fahren Sie mit dem Experiment fort",
             channel: "my_channel_id",
             small_icon: "ic_launcher",
-
-            // You can add any additional data that is important for the notification
-            // It will be added to the PendingIntent along with the rest of the bundle.
-            // e.g.
-            data: { foo: "bar" },
         };
 
         await ReactNativeAN.scheduleAlarm({ ...alarmNotifData, fire_date: fireDate })
         BackgroundTimer.setTimeout(() => {
             setDisabled(false)
-        }, 15000);
+        }, 60000);
         
     }
 
@@ -57,86 +51,30 @@ export const PostVideoSreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
-                <View>
-                    <Text style={styles.splashHeader}>
-                        Thank you for watching the video. Please wait until you receive a notification to continue with the experiment.
-                        In the meantime, you can leave the experiment app and use your phone normally.
-                    </Text>
-                </View>
+                <Headline marginTop={50} fontSize={24} text={"Es gibt nun eine kurze Pause. Bitte nutzen Sie Ihr Smartphone, wie auch sonst, wenn Sie in einer Situation sind, in der Sie warten müssen. In Kürze ertönt dann ein Signalton. Dann geht es mit der Studie weiter."} />
             </View>
-            <View style={styles.buttonsWrapper}>
-                <TouchableOpacity
-                    disabled={disabled}
-                    onPress={() => {
-                        ReactNativeAN.stopAlarmSound();
-                        ReactNativeAN.removeAllFiredNotifications();
-                        NativeModules.ScreenListenerModule.stopScreenChangeService()
-                        navigation.navigate('PostVideoScreen')
-                    }}
-                    style={styles.buttonContainer}
-                >
-                    <LinearGradient style={styles.gradient} colors={disabled ? ['#e5e5e5', '#ADADAD'] : ['#38B0C0', '#27D6EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                        <Text style={styles.buttonText}>Get Started</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
-            </View>
+            <MainButton
+                validated={disabled}
+                buttonText = "Weiter"
+                onPress={() => {
+                    ReactNativeAN.stopAlarmSound();
+                    ReactNativeAN.removeAllFiredNotifications();
+                    NativeModules.ScreenListenerModule.stopScreenChangeService()
+                    navigation.navigate('QuestionScreen')
+                }} />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        marginHorizontal: 35,
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'white'
-    },
-    splashText: {
-        textAlign: 'center',
-        fontSize: 16,
-        lineHeight: 24,
-        color: '#80969F',
-        fontFamily: 'Poppins-Regular',
-        width: 300,
-        paddingTop: 10,
-    },
-    splashHeader: {
-
-        fontFamily: 'Poppins-SemiBold',
-        fontSize: 30,
-        color: '#002D40',
-        textAlign: 'center',
-
     },
     textWrapper: {
         alignItems: 'center',
-        justifyContent: 'center',
         flex: 3
     },
-    buttonsWrapper: {
-        flex: 1,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        width: 300
 
-    },
-
-    buttonContainer: {
-        flex: 0.4,
-    },
-    buttonText: {
-        fontWeight: '600',
-        fontSize: 16,
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontFamily: 'Poppins-SemiBold'
-
-    },
-    gradient: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 50,
-        elevation: 6,
-    }
 })

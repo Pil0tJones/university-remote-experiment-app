@@ -1,79 +1,58 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import { NativeModules } from 'react-native';
+import { UserState } from '../redux/user/user.types';
 import {
     StyleSheet,
     View,
-    TouchableOpacity,
-    Text
+    Text,
+    FlatList,
+    BackHandler
 } from 'react-native';
-import Unorderedlist from 'react-native-unordered-list';
-import LinearGradient from 'react-native-linear-gradient';
+import { MainButton } from './partials/buttons/mainButton'
+import { Headline } from './partials/headline/headline'
 
 
 
 export const PrivacyScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const userState: UserState = useSelector(state => state.userState)
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true);
+    }, [])
+
+    useEffect(() => {
+        if (userState.id) {
+            NativeModules.ScreenListenerModule.startScreenChangeService(userState.id);
+        }
+    }, [userState])
+
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
-                <View>
-                    <Text style={styles.privacyHeader}>
-                        During the experiment the app will collect the following information anonymously
-                    </Text>
-                </View>
-                    <Unorderedlist style={styles.align}>
-                        <Text style={styles.splashText}>
-                            Demopgraphicsj
-                    </Text>
-                    </Unorderedlist>
-
-
-                    <Unorderedlist style={styles.align}>
-                        <Text style={styles.splashText}>
-                            Demopgraphics
-                    </Text>
-                    </Unorderedlist>
-                    <Unorderedlist style={styles.align}>
-                        <Text style={styles.splashText}>
-                            Demopgraphics
-                    </Text>
-                    </Unorderedlist>
-                    <Unorderedlist style={styles.align}>
-                        <Text style={styles.splashText}>
-                            Demopgraphics
-                    </Text>
-                    </Unorderedlist>
-                    <Unorderedlist style={styles.align}>
-                        <Text style={styles.splashText}>
-                            Demopgraphics
-                    </Text>
-                    </Unorderedlist>
-                    <Unorderedlist style={styles.align}>
-                        <Text style={styles.splashText}>
-                            Demopgraphics
-                    </Text>
-                    </Unorderedlist>
-                    <Unorderedlist style={styles.align}>
-                        <Text style={styles.splashText}>
-                            Demopgraphics
-                    </Text>
-                    </Unorderedlist>
-
+                <Headline text="Während des Experiments sammelt die App anonymisiert folgende Daten" marginTop={50} fontSize={20} />
+                <FlatList
+                    style={styles.list}
+                    data={[
+                        { key: 'Demografische Daten' },
+                        { key: 'Bildschirmzeit ' },
+                        { key: 'Antworten' },
+                        { key: 'Antwortzeiten' },
+                    ]}
+                    renderItem={({ item }) => <Text style={styles.item}>{item.key}</Text>}
+                />
             </View>
-            <View style={styles.buttonsWrapper}>
-                <View style={styles.consentNoteContainer}>
-                    <Text style={styles.consentNote}>
-                        By clicking on get started, you consent that we collect the above mentioned data.
+            <View style={styles.consentNoteContainer}>
+                <Text style={styles.consentNote}>
+                    Klicken Sie auf "Weiter", erklären Sie sich damit einverstanden, dass wir die oben genannten Daten erheben.
                     </Text>
-                </View>
-                <TouchableOpacity
+                <MainButton
                     onPress={() => {
-                        navigation.navigate('Demographics')
+                        navigation.navigate('DemographicsScreen')
                     }}
-                    style={styles.buttonContainer}
-                >
-                    <LinearGradient style={styles.gradient} colors={['#38B0C0', '#27D6EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                        <Text style={styles.buttonText}>Get Started</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
+                    buttonText={"Weiter"}
+                />
+
             </View>
         </View>
     )
@@ -84,70 +63,37 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'white',
-        marginHorizontal:35
+        marginHorizontal: 35,
     },
-    splashText: {
+    item: {
         fontSize: 16,
+        marginTop: 25,
         lineHeight: 24,
-        color: '#80969F',
-        fontFamily: 'Poppins-Regular',
-    },
-    privacyHeader: {
-        fontFamily: 'Poppins-SemiBold',
-        fontSize: 20,
-        color: '#002D40',
-        textAlign: 'center',
-        paddingBottom: 50
-    },
-    textContainer: {
-    },
-    align: {
-        alignSelf: 'center',
-        marginVertical: 5
+        color: 'grey',
+        fontFamily: 'Poppins-Bold',
+        fontWeight: '700',
+        textAlign: 'center'
     },
     textWrapper: {
-        alignItems: 'center',
+        flex: 2.8,
         justifyContent: 'flex-start',
-        flex: 2.5,
-        marginTop: 100,
-        marginHorizontal: 35
+        alignItems: 'center',
     },
-    buttonsWrapper: {
-        flex: 1,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        width: 300
-
-    },
-
-    buttonContainer: {
-        flex: 0.5,
-    },
-    buttonText: {
-        fontWeight: '600',
-        fontSize: 16,
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontFamily: 'Poppins-SemiBold'
-
+    list: {
+        marginTop: 75,
     },
     consentNote: {
+        paddingTop: 45,
+        paddingLeft: 10,
+        width: 300,
         fontSize: 12,
-        color: '#80969F',
+        color: 'red',
         fontFamily: 'Poppins-Regular',
+        textAlign: 'left',  
+
     },
     consentNoteContainer: {
-        marginHorizontal: 15,
-  
-        marginBottom: 10
-    },
-    gradient: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 50,
-        elevation: 6,
-    }
+    },
 })

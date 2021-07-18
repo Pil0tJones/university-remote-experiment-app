@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserState } from '../redux/user/user.types';
 import { userCreationRequest } from '../redux/user/user.actions'
-import NumericInput from 'react-native-numeric-input'
+import { MainButton } from './partials/buttons/mainButton'
+import { Headline } from './partials/headline/headline'
+import InputSpinner from "react-native-input-spinner";
 import {
     StyleSheet,
     View,
-    TouchableOpacity,
     Text,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import CheckBox from '@react-native-community/checkbox';
 
 
@@ -21,33 +21,30 @@ export const DemographicsScreen = ({ navigation }) => {
     const [genderFemale, setGenderFemale] = useState(false);
     const [genderOther, setGenderOther] = useState(false);
     const [age, setAge] = useState(0);
-    const [phoneUsage, setPhoneUsage] = useState(0);
-    const validated = ((genderMale === true || genderFemale === true || genderOther === true) && age !== 0 && phoneUsage !== 0)
+    const validated = ((genderMale === true || genderFemale === true || genderOther === true))
 
-    const registerUser = () => {
+    const onPressHandler = () => {
         if (!userState.id) {
             let gender = '';
             if (genderMale) { gender = 'male' };
             if (genderFemale) { gender = 'female' };
             if (genderOther) { gender = 'other' };
             const userId = + new Date;
-            dispatch(userCreationRequest(userId.toString(), gender, age, phoneUsage))
+            dispatch(userCreationRequest(userId.toString(), gender, age))
         }
-        navigation.navigate("PreVideoScreen");
+        navigation.navigate("QuestionScreen");
     }
+
+
 
     return (
         <View style={styles.container}>
             <View style={styles.contentWrapper}>
-                <View>
-                    <Text style={styles.splashHeader}>
-                        Please fill out the following field
-                    </Text>
-                </View>
-                <View>
+            <Headline text="Bitte fülle folgende Felder aus" marginTop={25} fontSize={30} />  
+                <View style={styles.questionContainer}>
                     <View style={styles.questionWrapper}>
                         <Text style={styles.splashText}>
-                            Gender
+                            Geschlecht
                         </Text>
                         <View style={styles.answersWrapper}>
                             <View style={styles.answer}>
@@ -57,7 +54,7 @@ export const DemographicsScreen = ({ navigation }) => {
                                     setGenderOther(() => false)
                                 }}
                                 />
-                                <Text>Male</Text>
+                                <Text>Mann</Text>
                             </View>
                             <View style={styles.answer}>
                                 <CheckBox value={genderFemale} onValueChange={value => {
@@ -66,7 +63,7 @@ export const DemographicsScreen = ({ navigation }) => {
                                     setGenderOther(() => false)
                                 }}
                                 />
-                                <Text>Female</Text>
+                                <Text>Frau</Text>
                             </View>
                             <View style={styles.answer}>
                                 <CheckBox value={genderOther} onValueChange={value => {
@@ -75,52 +72,30 @@ export const DemographicsScreen = ({ navigation }) => {
                                     setGenderOther(() => !genderOther)
                                 }}
                                 />
-                                <Text>Other</Text>
+                                <Text>Divers</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.questionWrapper}>
                         <Text style={styles.splashText}>
-                            Age
+                            Alter
                     </Text>
                         <View style={styles.numericInput}>
-                            <NumericInput
-                                rounded={true}
+                            <InputSpinner
+                                buttonStyle={{backgroundColor:"#38B0C0"}}
+                                style={{backgroundColor:"#fff"}}
+                                initialValue={20}
+                                step={1}
+                                skin={"modern"}
+                                fontSize={16}
                                 value={age}
-                                minValue={0}
-                                onChange={value => setAge(() => {
-                                    console.log(value)
-                                    return (
-                                        value
-                                )})} />
-                        </View>
-                    </View>
-                    <View style={styles.questionWrapper}>
-                        <Text style={styles.splashText}>
-                            Daily Smartphone Usage (in h)
-                    </Text>
-                        <View style={styles.numericInput}>
-                            <NumericInput
-                                rounded={true}
-                                value={phoneUsage}
-                                minValue={0}
-                                onChange={value => setPhoneUsage(() => value)} />
+                                onChange={(num:number) => setAge(num)}
+                            />
                         </View>
                     </View>
                 </View>
             </View>
-            <View style={styles.buttonsWrapper}>
-                <TouchableOpacity
-                disabled={!validated}
-                    onPress={() => {
-                        registerUser();
-                    }}
-                    style={styles.buttonContainer}>
-                    <LinearGradient style={styles.gradient} colors={!validated ? ['#e5e5e5', '#ADADAD'] : ['#38B0C0', '#27D6EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                        <Text style={styles.buttonText}>Get Started</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
-            </View>
+            <MainButton onPress={onPressHandler} buttonText={"Weiter"} validated={!validated}/>
         </View>
     )
 }
@@ -132,31 +107,32 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginHorizontal: 35
     },
+    questionContainer:{
+        justifyContent: 'space-around',
+        display: 'flex',
+        flex: 1,
+        marginBottom: 100
+    },
     contentWrapper: {
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop: 50,
-        flex: 3,
+        flex: 2.5,
     },
     questionWrapper: {
-        marginBottom: 20
+        marginTop: 30
     },
     splashText: {
         fontFamily: 'Poppins-SemiBold',
         fontSize: 20,
         color: '#002D40',
         textAlign: 'center',
+        paddingBottom:15
     },
     answersWrapper: {
         flexDirection: 'row',
         alignContent: 'center',
         paddingTop: 15
-    },
-    buttonsWrapper: {
-        flex: 1,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        width: 300
     },
     splashHeader: {
         fontFamily: 'Poppins-SemiBold',
@@ -165,25 +141,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingBottom: 30
 
-    },
-    buttonContainer: {
-        flex: 0.4,
-    },
-    buttonText: {
-        fontWeight: '600',
-        fontSize: 16,
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontFamily: 'Poppins-SemiBold'
-
-    },
-    gradient: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 50,
-        elevation: 6,
     },
     input: {
         borderWidth: 1,

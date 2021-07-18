@@ -1,34 +1,30 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     StyleSheet,
     View,
-    TouchableOpacity,
     Text
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { MainButton } from './partials/buttons/mainButton';
+import Orientation from 'react-native-orientation';
 
 
 
 export const PreVideoScreen = ({ navigation }) => {
+
+    useEffect(() => {
+        return () => {
+            Orientation.unlockAllOrientations()
+        }
+    })
+    
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
                 <Text style={styles.preVideoHeader}>
-                    You will be now shown a short video. Please watch it attentively 
+                    Ihnen wird nun ein Video gezeigt. Bitte schauen Sie es aufmerksam an. 
                 </Text>
             </View>
-            <View style={styles.buttonsWrapper}>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('PostVideoScreen')
-                    }}
-                    style={styles.buttonContainer}
-                >
-                    <LinearGradient style={styles.gradient} colors={['#38B0C0', '#27D6EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                        <Text style={styles.buttonText}>Get Started</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
-            </View>
+            <MainButton buttonText={"Video anschauen"} onPress={() => navigation.navigate("VideoScreen")} />
         </View>
     )
 }
@@ -41,7 +37,6 @@ const styles = StyleSheet.create({
         marginHorizontal:35
     },
     preVideoHeader: {
-
         fontFamily: 'Poppins-SemiBold',
         fontSize: 20,
         color: '#002D40',
@@ -52,34 +47,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 3,
-
-    },
-    buttonsWrapper: {
-        flex: 1,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        width: 300
-
-    },
-
-    buttonContainer: {
-        flex: 0.4,
-    },
-    buttonText: {
-        fontWeight: '600',
-        fontSize: 16,
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontFamily: 'Poppins-SemiBold'
-
-    },
-    gradient: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 50,
-        elevation: 6,
     }
 })
 

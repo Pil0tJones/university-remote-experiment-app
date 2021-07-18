@@ -32,6 +32,7 @@ export function questionReducer(
                 questionType: action.payload.questionType,
                 updating: false,
                 loaded: true,
+                error:false
             });
         case QuestionsActionTypes.Fail:
             return Object.assign({}, state, {

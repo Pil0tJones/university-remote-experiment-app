@@ -19,12 +19,12 @@ class ScreenStateInfo(
 
 private val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("http://595fb39b3ebb.ngrok.io")
+        .baseUrl("http://9d8bfd4a0358.ngrok.io")
         .build()
 
 
 interface ExperimentApiService {
-    @POST("screen-state-change")
+    @POST("api/screen-state-change")
     suspend fun screenStateChange(@Body screenStateInfo: ScreenStateInfo): Call<ScreenStateInfo>
 }
 object ExperimentApi {

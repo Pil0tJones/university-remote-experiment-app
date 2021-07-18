@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import { startTimer, stopTimer, clearTimer } from '../redux/timer/timer.actions';
-import { QuestionState } from '../redux/questions/questions.types'; 
-import { UserState } from '../redux/user/user.types'; 
+import { useSelector, useDispatch } from 'react-redux';
+import { startTimer, clearTimer } from '../redux/timer/timer.actions';
+import { QuestionState } from '../redux/questions/questions.types';
+import { UserState } from '../redux/user/user.types';
 import { trySendAnswer } from '../redux/answers/answers.actions'
 import { requestQuestion } from '../redux/questions/questions.actions'
 import { clearCurrentAnswer } from '../redux/currentAnswer/currentAnswer.actions';
+import { MainButton } from './partials/buttons/mainButton';
 import {
     StyleSheet,
     View,
-    TouchableOpacity,
     Text,
 } from 'react-native';
-import {ScaleAnswers} from './partials/scaleAnswers/scaleAnswers'
-import {LoadingSpinner} from './partials/loadingSpinner/loadingSpinner'
-import LinearGradient from 'react-native-linear-gradient';
+import { Likert4Answers, Likert5Answers } from './partials/answers/scaleAnswers'
+import { Headline } from './partials/headline/headline'
+import { OpenAnswer } from './partials/answers/openAnswer'
+import { BinaryOpenAnswer } from './partials/answers/binaryOpenAnswer'
+import { LoadingSpinner } from './partials/loadingSpinner/loadingSpinner'
 
 
 
@@ -29,29 +31,42 @@ export const QuestionScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (!questionState.loaded && !questionState.updating) {
-            dispatch(requestQuestion(1));
+            dispatch(requestQuestion(41));
         }
     }, [navigation])
 
-   useEffect(() => {
-       if (questionState.loaded) dispatch(startTimer());
-   }, [questionState.loaded])
+    useEffect(() => {
+        if (questionState.loaded) dispatch(startTimer());
+    }, [questionState.loaded])
 
     const onPressHandler = (time: number) => {
-        dispatch(trySendAnswer(userState.id, [...answerState.answers, {
-            questionType: questionState.questionType,
-            questionId: questionState.questionId,
-            answer: currentAnswerState.currentAnswer,
-            responseTime: timerState.startTime - time
-        }]))
+        if (questionState.questionType === 'likert' || questionState.questionType === 'likert_affective') {
+            dispatch(trySendAnswer(userState.id, [...answerState.answers, {
+                questionType: questionState.questionType,
+                questionId: questionState.questionId,
+                answer: currentAnswerState.currentAnswer,
+                responseTime: timerState.startTime - time
+            }]))
+
+        }
+
+        if (questionState.questionType === 'open' || questionState.questionType === 'binary_variant' || questionState.questionType === 'smartphone_usage') {
+            dispatch(trySendAnswer(userState.id, [...answerState.answers, {
+                questionType: questionState.questionType,
+                questionId: questionState.questionId,
+                answer: currentAnswerState.currentAnswer,
+            }]))
+        }
+
         dispatch(clearCurrentAnswer());
         dispatch(clearTimer());
-        if (questionState.questionId < 12) {
+        if (questionState.questionId && questionState.questionId < 59) {
             dispatch(requestQuestion(questionState.questionId + 1));
         } else {
-            navigation.navigate('PrivacyScreen');
+            navigation.navigate('ThankYouScreen');
         }
     }
+
 
     if (!questionState.loaded && questionState.updating) {
         return (
@@ -59,26 +74,52 @@ export const QuestionScreen = ({ navigation }) => {
         )
     }
 
-
+    if (questionState.loaded && questionState.error) {
+        return (
+            <View style={styles.errorContainer}>
+                <Headline text="Etwas ist schiefgelaufen, überprüfe deine Internetverbindung und versuche es nocheinmal" fontSize={20} marginTop={0} />
+                <View style={styles.errorButton}>
+                    <MainButton
+                        buttonText="Nochmal versuchen"
+                        validated={disabled}
+                        onPress={() => {
+                            dispatch(requestQuestion(questionState.questionId + 1))
+                        }} />
+                </View>
+            </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.question}>
                 <Text style={styles.questionText}>{questionState.question.question}</Text>
             </View>
-            <ScaleAnswers />
-            <View style={styles.button}>
-                <TouchableOpacity
+            <View style={styles.answerContainer}>
+                {questionState.questionType === 'open' && (
+                    <OpenAnswer onPress={onPressHandler} />
+                )}
+                {(questionState.questionType === 'likert' || questionState.questionType === 'smartphone_usage') && (
+                    <Likert5Answers />
+                )}
+                {questionState.questionType === 'likert_affective' && (
+                    <Likert4Answers />
+                )}
+                {questionState.questionType === 'binary_variant' && (
+                    <BinaryOpenAnswer />
+                )}
+            </View>
+
+
+            <View style={styles.buttonContainer}>
+                <MainButton
+                    buttonText="Nächste Frage"
+                    validated={disabled}
                     onPress={() => {
                         const now = Date.now()
                         onPressHandler(now);
-                    }}
-                    style={styles.buttonContainer}
-                    disabled={disabled}>
-                    <LinearGradient style={styles.gradient} colors={disabled ? ['#e5e5e5', '#ADADAD'] : ['#38B0C0', '#27D6EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                        <Text style={styles.buttonText}>Next Question</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
+                    }} />
+
             </View>
         </View>
     )
@@ -87,47 +128,42 @@ export const QuestionScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 35
+        marginHorizontal: 35,
     },
     question: {
-        flex: 0.6,
+        flex: 1,
+        zIndex: 11,
         alignItems: 'center',
         justifyContent: 'center',
     },
     questionText: {
         fontFamily: 'Poppins-SemiBold',
-        fontSize: 30,
+        fontSize: 24,
         color: '#002D40',
         textAlign: 'center'
-    },
-    button: {
-        flex: 0.7,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-    },
-    buttonContainer: {
-        flex: 0.5,
-    },
-    buttonText: {
-        fontWeight: '600',
-        fontSize: 16,
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontFamily: 'Poppins-SemiBold'
-
-    },
-    gradient: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 50,
-        elevation: 6,
     },
     loadingSpinnerContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    answerContainer: {
+        flex: 2,
+    },
+    buttonContainer: {
+        flex: .5,
+        alignItems: 'center',
+        marginTop: 30
+    },
+    errorContainer: {
+        marginHorizontal: 35,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    errorButton: {
+        paddingTop: 30
     }
+
 
 })

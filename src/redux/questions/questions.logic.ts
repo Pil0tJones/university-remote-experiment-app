@@ -8,7 +8,7 @@ export const requestQuestionLogic = createLogic<QuestionState, QuestionRequestPa
     process: async ({getState, action}, dispatch, done) => {
       try {
         const id = action.payload.questionId
-        const api = `http://585a0f4abab5.ngrok.io/api/questions/${id}` //adjust api
+        const api = `http://236e77569cae.ngrok.io/api/questions/${id}` //adjust api
         await axios.get(api)
             .then((response: any) => {
               console.log('question response', response)

@@ -5,12 +5,14 @@ import { Provider } from 'react-redux'
 import { store } from './src/redux/store'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { IntroScreen } from './src/views/IntroScreen';
+import { IntroScreen } from './src/views/WelcomeScreen';
 import { DemographicsScreen } from './src/views/DemographicsScreen';
 import { PrivacyScreen } from './src/views/PrivacyScreen';
+import { VideoScreen } from './src/views/VideoScreen';
 import { PreVideoScreen } from './src/views/PreVideoScreen';
 import { PostVideoSreen } from './src/views/PostVideoScreen';
 import { QuestionScreen } from './src/views/QuestionScreen';
+import { ThankYouScreen } from './src/views/ThankYouScreen';
 
 
 
@@ -33,10 +35,6 @@ const MyTheme = {
 
 const App = () => {
 
-
-
-
-
   return (
     <Provider store={store}>
       <NavigationContainer theme={MyTheme}>
@@ -52,7 +50,7 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="Demographics"
+            name="DemographicsScreen"
             component={DemographicsScreen}
             options={{ headerShown: false }}
           />
@@ -62,13 +60,23 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="VideoScreen"
+            component={VideoScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="PostVideoScreen"
             component={PostVideoSreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="Question1"
+            name="QuestionScreen"
             component={QuestionScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ThankYouScreen"
+            component={ThankYouScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

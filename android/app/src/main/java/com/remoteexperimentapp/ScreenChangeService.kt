@@ -17,8 +17,6 @@ class ScreenChangeService() : Service() {
 
     private val CHANNEL_ID = "Experiment Service"
 
-
-
     companion object {
         fun startService(context: Context, message: String) {
             val startIntent = Intent(context, ScreenChangeService::class.java)
@@ -56,9 +54,9 @@ class ScreenChangeService() : Service() {
                 0, notificationIntent, 0
         )
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Foreground Service Kotlin Example")
+                .setContentTitle("Dieser Service misst die Bildschirmzeit")
                 .setContentText(input)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .build()
         startForeground(1, notification)

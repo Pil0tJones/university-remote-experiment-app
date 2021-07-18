@@ -3,9 +3,7 @@ package com.remoteexperimentapp
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.util.Log
-import android.widget.Toast
 import com.remoteexperimentapp.network.ExperimentApi
 import com.remoteexperimentapp.network.ScreenStateInfo
 import kotlinx.coroutines.GlobalScope
@@ -16,23 +14,22 @@ import java.sql.Timestamp
 class ScreenOnReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
 
-
-
-
-
-
         val timestamp = Timestamp(System.currentTimeMillis())
         if(intent!!.action == Intent.ACTION_SCREEN_ON) {
-            val user_id = this.context.getSharedPreferences()
+            val userPref = context!!.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+            val userId = userPref.getString("user_id","userID")
             val screenStateInfo = ScreenStateInfo(
                     screenState = "on",
-                    timestamp = timestamp
+                    timestamp = timestamp,
+                    user_id = userId!!
             )
             GlobalScope.launch {
-                ExperimentApi.retrofitService.screenStateChange(screenStateInfo)
+                try {
+                    ExperimentApi.retrofitService.screenStateChange(screenStateInfo)
+                } catch(e: Exception) {
+                        Log.d("ERROR", e.toString())
+                }
             }
-            Toast.makeText(context!!, "Screen On", Toast.LENGTH_SHORT).show()
-            Log.d("TAG", "THIIIIS WOOOORKS")
         }
     }
 }

@@ -8,7 +8,6 @@ export interface UserRequestPayload {
     id: string;
     age: number;
     gender: string;
-    phoneUsage: number;
 }
 
 
