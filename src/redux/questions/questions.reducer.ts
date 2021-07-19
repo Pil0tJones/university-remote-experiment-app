@@ -15,7 +15,7 @@ export const initialState: QuestionState = {
 export function questionReducer(
     state: QuestionState = initialState,
     action: any
-): any {
+): QuestionState {
     switch (action.type) {
         case QuestionsActionTypes.Request:
             return Object.assign({}, state, {

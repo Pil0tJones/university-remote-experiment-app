@@ -1,3 +1,5 @@
+import { startTimer, clearTimer} from './timer.actions'
+
 export enum TimerActionTypes {
     Start = '@timer/set',
     // Stop = '@timer/stop',
@@ -17,3 +19,11 @@ export interface TimerState {
     time: number;
     currentlyRunning: boolean;
 }
+
+export interface HasTimerState {
+    timerState: TimerState
+}
+
+export type TimerActions =
+|ReturnType<typeof startTimer>
+|ReturnType<typeof clearTimer>

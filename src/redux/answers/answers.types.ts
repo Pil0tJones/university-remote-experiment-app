@@ -1,3 +1,5 @@
+import {trySendAnswer, successSendAnswer, failSendAnswer, setAnswer} from './answers.actions'
+
 export enum AnswersActionTypes {
     SetAnswer = '@answers/set',
     TrySendAnswer = '@answers/try',
@@ -12,8 +14,8 @@ export interface AnswerRequestPayload {
 export interface Answer {
     questionType: string;
     questionId: number;
-    answer: number | string;
-    responseTime: number;
+    answer: number | string|undefined;
+    responseTime?: number;
 }
 
 export interface AnswersState {
@@ -23,3 +25,12 @@ export interface AnswersState {
     error: boolean;
 }
 
+export interface HasAnswersState {
+    answersState: AnswersState
+}
+
+export type AnswerActions =
+| ReturnType<typeof trySendAnswer> 
+| ReturnType<typeof successSendAnswer> 
+| ReturnType<typeof setAnswer> 
+| ReturnType<typeof failSendAnswer> 

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../redux/types';
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
 import { UserState } from '../redux/user/user.types';
 import { userCreationRequest } from '../redux/user/user.actions'
 import { MainButton } from './partials/buttons/mainButton'
@@ -12,11 +15,18 @@ import {
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'DemographicsScreen'
+>;
 
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
 
-export const DemographicsScreen = ({ navigation }) => {
+export const DemographicsScreen = ({ navigation }:Props) => {
     const dispatch = useDispatch();
-    const userState: UserState = useSelector(state => state.userState)
+    const userState: UserState = useSelector((state: AppState) => state.userState)
     const [genderMale, setGenderMale] = useState(false);
     const [genderFemale, setGenderFemale] = useState(false);
     const [genderOther, setGenderOther] = useState(false);

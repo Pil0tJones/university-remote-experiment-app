@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App'
 import {
     StyleSheet,
     View,
@@ -9,8 +11,17 @@ import Orientation from 'react-native-orientation';
 import { MainButton } from './partials/buttons/mainButton'
 import { Headline } from './partials/headline/headline'
 
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Intro'
+>;
 
-export const IntroScreen = ({ navigation }) => {
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
+
+
+export const    IntroScreen = ({ navigation }: Props) => {
 
     useEffect(() => {
         Orientation.lockToPortrait();

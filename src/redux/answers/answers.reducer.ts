@@ -1,4 +1,4 @@
-import { AnswersActionTypes, AnswersState, Answer  } from './answers.types';
+import { AnswersActionTypes, AnswersState, AnswerActions  } from './answers.types';
 
 export const initialState: AnswersState = {
     answers:[],
@@ -9,8 +9,8 @@ export const initialState: AnswersState = {
 
 export function answersReducer(
     state: AnswersState = initialState,
-    action: any
-): any {
+    action: AnswerActions
+): AnswersState {
     switch (action.type) {
         case AnswersActionTypes.SetAnswer:
             return Object.assign({}, state, {

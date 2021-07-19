@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
 import { startTimer, clearTimer } from '../redux/timer/timer.actions';
 import { QuestionState } from '../redux/questions/questions.types';
 import { UserState } from '../redux/user/user.types';
 import { trySendAnswer } from '../redux/answers/answers.actions'
+import { AppState } from '../redux/types';
 import { requestQuestion } from '../redux/questions/questions.actions'
 import { clearCurrentAnswer } from '../redux/currentAnswer/currentAnswer.actions';
 import { MainButton } from './partials/buttons/mainButton';
@@ -19,14 +22,22 @@ import { BinaryOpenAnswer } from './partials/answers/binaryOpenAnswer'
 import { LoadingSpinner } from './partials/loadingSpinner/loadingSpinner'
 
 
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'QuestionScreen'
+>;
 
-export const QuestionScreen = ({ navigation }) => {
-    const disabled = !useSelector(state => state.multipleChoiceValidated.validated);
-    const questionState: QuestionState = useSelector(state => state.questionState);
-    const userState: UserState = useSelector(state => state.userState);
-    const currentAnswerState = useSelector(state => state.currentAnswerState);
-    const answerState = useSelector(state => state.answersState);
-    const timerState = useSelector(state => state.timerState);
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
+
+export const QuestionScreen = ({ navigation }: Props) => {
+    const disabled = !useSelector((state:AppState) => state.formsState.validated);
+    const questionState: QuestionState = useSelector((state:AppState) => state.questionState);
+    const userState: UserState = useSelector((state:AppState) => state.userState);
+    const currentAnswerState = useSelector((state:AppState) => state.currentAnswerState);
+    const answerState = useSelector((state:AppState) => state.answersState);
+    const timerState = useSelector((state:AppState) => state.timerState);
     const dispatch = useDispatch();
 
     useEffect(() => {

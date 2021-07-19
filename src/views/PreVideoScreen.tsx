@@ -1,4 +1,6 @@
 import React, {useEffect} from 'react';
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
     StyleSheet,
     View,
@@ -7,9 +9,16 @@ import {
 import { MainButton } from './partials/buttons/mainButton';
 import Orientation from 'react-native-orientation';
 
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'PreVideoScreen'
+>;
 
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
 
-export const PreVideoScreen = ({ navigation }) => {
+export const PreVideoScreen = ({ navigation }:Props) => {
 
     useEffect(() => {
         return () => {

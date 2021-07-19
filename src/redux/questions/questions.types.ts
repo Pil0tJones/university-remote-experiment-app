@@ -1,3 +1,5 @@
+import {failQuestion, receiveQuestion, requestQuestion} from './questions.actions';
+
 export enum QuestionsActionTypes {
     Request = '@questions/request',
     Receive = '@questions/receive',
@@ -15,14 +17,10 @@ export interface QuestionResponsePayload {
     questionAnswers: string[];
 }
 
-
 export interface Question {
     question: string;
     questionAnswers?: string[];
 }
-
-
-
 export interface QuestionState {
     question: Question,
     questionId: number;
@@ -31,4 +29,13 @@ export interface QuestionState {
     updating: boolean;
     error: boolean;
 }
+
+export interface HasQuestionState {
+    questionState: QuestionState
+}
+
+export type QuestionActions =
+    |ReturnType<typeof failQuestion>
+    |ReturnType<typeof receiveQuestion>
+    |ReturnType<typeof requestQuestion>
 

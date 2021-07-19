@@ -1,4 +1,6 @@
 import React from 'react';
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Headline } from './partials/headline/headline'
 import {
     StyleSheet,
@@ -6,7 +8,17 @@ import {
     Text,
 } from 'react-native';
 
-export const ThankYouScreen = ({ navigation }) => {
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ThankYouScreen'
+>;
+
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
+
+
+export const ThankYouScreen = ({ navigation }: Props) => {
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>

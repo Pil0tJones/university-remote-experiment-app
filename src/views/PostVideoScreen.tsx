@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux'
-import { UserState } from '../redux/user/user.types'
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
 import ReactNativeAN from 'react-native-alarm-notification';
 import BackgroundTimer from 'react-native-background-timer';
 import { NativeModules } from 'react-native';
@@ -13,10 +13,18 @@ import {
 } from 'react-native';
 
 
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'PostVideoScreen'
+>;
 
-export const PostVideoSreen = ({ navigation }) => {
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
+
+
+export const PostVideoSreen = ({ navigation }:Props) => {
     const [disabled, setDisabled] = useState(true)
-    const userState: UserState = useSelector(state => state.userState)
 
 
     useEffect(() => {

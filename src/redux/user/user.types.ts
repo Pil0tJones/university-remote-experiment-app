@@ -1,3 +1,5 @@
+import {userCreationRequest, userCreationFail, userCreationSuccess } from './user.actions'
+
 export enum UserActionTypes {
     CreationRequest = '@user/create',
     Success = '@user/success',
@@ -20,4 +22,13 @@ export interface UserState {
     updating: boolean,
     loaded: boolean
 }
+
+export interface HasUserState {
+    userState: UserState
+}
+
+export type UserActions = 
+  | ReturnType<typeof userCreationRequest>
+  | ReturnType<typeof userCreationFail>
+  | ReturnType<typeof userCreationSuccess>
 

@@ -7,7 +7,7 @@ import {QuestionState} from '../../../redux/questions/questions.types'
 import CheckBox from '@react-native-community/checkbox';
 
 
-export const Likert4Answers = (props: any) => {
+export const Likert4Answers = () => {
     const dispatch = useDispatch();
     const questionState: QuestionState = useSelector(state=> state.questionState)
     const currentAnswerState = useSelector(state=> state.currentAnswerState)

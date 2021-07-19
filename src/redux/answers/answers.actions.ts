@@ -13,6 +13,11 @@ export const trySendAnswer= (
     }
 });
 
+export const setAnswer= (
+): StandardAction<AnswersActionTypes.SetAnswer, undefined> => ({
+    type: AnswersActionTypes.SetAnswer,
+});
+
 export const successSendAnswer = (
     answers: Answer[]
 ): StandardAction<AnswersActionTypes.SuccessSendAnswer, {answers:Answer[]}> => ({

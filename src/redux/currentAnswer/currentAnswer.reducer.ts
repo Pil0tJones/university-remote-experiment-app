@@ -1,4 +1,4 @@
-import { CurrentAnswerActionTypes, CurrentAnswerState  } from './currentAnswer.types';
+import { CurrentAnswerActionTypes, CurrentAnswerState, CurrentAnswerActions  } from './currentAnswer.types';
 
 export const initialState: CurrentAnswerState = {
     currentAnswer: undefined,
@@ -6,8 +6,8 @@ export const initialState: CurrentAnswerState = {
 
 export function currentAnswerReducer(
     state: CurrentAnswerState = initialState,
-    action: any
-): any {
+    action: CurrentAnswerActions
+): CurrentAnswerState {
     switch (action.type) {
         case CurrentAnswerActionTypes.Set:
             return Object.assign({}, state, {

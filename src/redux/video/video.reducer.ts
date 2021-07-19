@@ -1,4 +1,4 @@
-import { VideoState, VideoActionTypes } from './video.types'
+import { VideoState, VideoActionTypes, VideoActions } from './video.types'
 
 
 export const initialState: VideoState = {
@@ -8,8 +8,8 @@ videoIndex: 0
 
 export function videoReducer(
     state: VideoState = initialState,
-    action: any
-): any {
+    action: VideoActions
+): VideoState {
     switch (action.type) {
         case VideoActionTypes.Next:
             return Object.assign({}, state, {

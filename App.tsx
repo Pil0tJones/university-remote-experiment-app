@@ -1,9 +1,8 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState, useRef } from 'react';
-import { AppState, AppRegistry, NativeModules } from 'react-native';
+import React from 'react';
 import { Provider } from 'react-redux'
 import { store } from './src/redux/store'
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IntroScreen } from './src/views/WelcomeScreen';
 import { DemographicsScreen } from './src/views/DemographicsScreen';
@@ -14,11 +13,19 @@ import { PostVideoSreen } from './src/views/PostVideoScreen';
 import { QuestionScreen } from './src/views/QuestionScreen';
 import { ThankYouScreen } from './src/views/ThankYouScreen';
 
+export type RootStackParamList = {
+  Intro: undefined, // undefined because you aren't passing any params to the home screen
+  WelcomeScreen: { name: string }; 
+  PrivacyScreen: { name: string }; 
+  DemographicsScreen: { name: string }; 
+  PreVideoScreen: { name: string }; 
+  VideoScreen: { name: string }; 
+  PostVideoScreen: { name: string }; 
+  QuestionScreen: { name: string }; 
+  ThankYouScreen: { name: string }; 
+};
 
-
-declare const global: { HermesInternal: null | {} };
-const Stack = createStackNavigator();
-
+const Stack = createStackNavigator<RootStackParamList>();
 
 const MyTheme = {
   dark: false,
@@ -34,7 +41,6 @@ const MyTheme = {
 
 
 const App = () => {
-
   return (
     <Provider store={store}>
       <NavigationContainer theme={MyTheme}>
@@ -83,8 +89,6 @@ const App = () => {
       </NavigationContainer>
 
     </Provider>
-
-
   );
 };
 

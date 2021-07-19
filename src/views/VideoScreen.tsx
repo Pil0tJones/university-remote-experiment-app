@@ -1,13 +1,22 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
 import { View, Dimensions, StyleSheet, Alert, Text } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'VideoScreen'
+>;
+
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
 
 
 
-
-export const VideoScreen = ({ navigation }) => {
-    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+export const VideoScreen = ({ navigation }:Props) => {
+    const { width: SCREEN_WIDTH } = Dimensions.get("window");
     const [isFullScreen, setIsFullScreen] = useState(false)
 
     const screenChangeHandler = () => {
@@ -26,8 +35,6 @@ export const VideoScreen = ({ navigation }) => {
             );
         }
     }
-
-
 
     return (
         <View style={styles.container}>

@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeModules } from 'react-native';
 import { UserState } from '../redux/user/user.types';
+import { AppState } from '../redux/types';
 import {
     StyleSheet,
     View,
@@ -12,11 +15,20 @@ import {
 import { MainButton } from './partials/buttons/mainButton'
 import { Headline } from './partials/headline/headline'
 
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'PrivacyScreen'
+>;
+
+type Props = {
+    navigation: ProfileScreenNavigationProp;
+  };
 
 
-export const PrivacyScreen = ({ navigation }) => {
+
+export const PrivacyScreen = ({ navigation }:Props) => {
     const dispatch = useDispatch();
-    const userState: UserState = useSelector(state => state.userState)
+    const userState: UserState = useSelector((state: AppState) => state.userState)
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true);
     }, [])

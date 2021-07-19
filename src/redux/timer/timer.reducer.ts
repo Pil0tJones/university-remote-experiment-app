@@ -1,4 +1,4 @@
-import { TimerActionTypes, TimerState  } from './timer.types';
+import { TimerActionTypes, TimerState, TimerActions  } from './timer.types';
 
 export const initialState: TimerState = {
     startTime: 0,
@@ -8,19 +8,14 @@ export const initialState: TimerState = {
 
 export function timerReducer(
     state: TimerState = initialState,
-    action: any
-): any {
+    action: TimerActions
+): TimerState {
     switch (action.type) {
         case TimerActionTypes.Start:
             return Object.assign({}, state, {
                 currentlyRunning: true,
                 startTime: Date.now()
             });
-        // case TimerActionTypes.Stop:
-        //     return Object.assign({}, state, {
-        //         time: state.startTime - Date.now(),
-        //         currentlyRunning: false,
-        //     });
         case TimerActionTypes.Clear:
             return initialState
         default:

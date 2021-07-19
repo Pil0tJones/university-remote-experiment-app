@@ -1,4 +1,4 @@
-import { FormsActionTypes, FormsState } from './forms.types';
+import { FormsActionTypes, FormsState, FormsActions } from './forms.types';
 
 export const initialState: FormsState = {
     validated: false
@@ -6,10 +6,9 @@ export const initialState: FormsState = {
 
 export function multipleChoiceQuestionReducer(
     state: FormsState = initialState,
-    action: any
-): any {
-    switch (action.type) {
-        
+    action: FormsActions
+): FormsState {
+    switch (action.type) { 
         case FormsActionTypes.validated:
             return Object.assign({}, state, {
                 validated: action.payload.validated,
