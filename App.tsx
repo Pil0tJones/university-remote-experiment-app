@@ -4,14 +4,19 @@ import { Provider } from 'react-redux'
 import { store } from './src/redux/store'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { IntroScreen } from './src/views/WelcomeScreen';
-import { DemographicsScreen } from './src/views/DemographicsScreen';
-import { PrivacyScreen } from './src/views/PrivacyScreen';
-import { VideoScreen } from './src/views/VideoScreen';
-import { PreVideoScreen } from './src/views/PreVideoScreen';
-import { PostVideoSreen } from './src/views/PostVideoScreen';
-import { QuestionScreen } from './src/views/QuestionScreen';
-import { ThankYouScreen } from './src/views/ThankYouScreen';
+
+import { WelcomeScreen, 
+        DemographicsScreen,
+        PrivacyScreen,
+        VideoScreen,
+        PreVideoScreen,
+        PostVideoSreen,
+        QuestionScreen,
+        ThankYouScreen,
+        OnboardingScreen
+      } from './src/views/Index';
+
+
 
 export type RootStackParamList = {
   Intro: undefined, // undefined because you aren't passing any params to the home screen
@@ -23,6 +28,7 @@ export type RootStackParamList = {
   PostVideoScreen: { name: string }; 
   QuestionScreen: { name: string }; 
   ThankYouScreen: { name: string }; 
+  OnboardingScreen: { name: string }; 
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -47,7 +53,12 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen
             name="Intro"
-            component={IntroScreen}
+            component={WelcomeScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OnboardingScreen"
+            component={OnboardingScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

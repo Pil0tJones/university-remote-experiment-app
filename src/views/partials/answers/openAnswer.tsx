@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
-import {validateForm} from '../../../redux/forms/forms.actions'
+import { View, StyleSheet, TextInput } from 'react-native';
+import {AppState} from '../../../redux/types'
 import {setCurrentAnswer} from '../../../redux/currentAnswer/currentAnswer.actions'
 import {useDispatch, useSelector} from 'react-redux';
 import {QuestionState} from '../../../redux/questions/questions.types'
@@ -8,8 +8,8 @@ import {QuestionState} from '../../../redux/questions/questions.types'
 
 export const OpenAnswer = (props: any) => {
     const dispatch = useDispatch();
-    const questionState: QuestionState = useSelector(state=> state.questionState)
-    const currentAnswerState = useSelector(state=> state.currentAnswerState)
+    const questionState: QuestionState = useSelector((state: AppState)=> state.questionState)
+    const currentAnswerState = useSelector((state: AppState)=> state.currentAnswerState)
     const [input, setInput] = useState("")
 
     const setUserInput = () => {

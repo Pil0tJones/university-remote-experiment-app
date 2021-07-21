@@ -1,17 +1,18 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { View, StyleSheet, Text } from 'react-native';
 
 interface MainButtonProps {
     fontSize: number;
     marginTop: number;
-    text: string;
+    children: React.ReactNode;
+    style?: any
+
 }
 
 export const Headline = (props: MainButtonProps) => {
     return (
         <View style={[styles.textContainer,{ marginTop: props.marginTop}]}>
-            <Text style={[styles.header,{ fontSize: props.fontSize}]}>{props.text}</Text>
+            <Text style={[styles.header,{ fontSize: props.fontSize, ...props.style }]}>{props.children}</Text>
         </View>
     )
 }

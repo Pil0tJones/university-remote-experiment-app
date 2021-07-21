@@ -7,7 +7,7 @@ export const trySendAnswerLogic = createLogic<AnswersState, AnswerRequestPayload
     type: AnswersActionTypes.TrySendAnswer,
     process: async ({getState, action}, dispatch, done) => {
       try {
-        const api = `http://236e77569cae.ngrok.io/api/answer` //adjust api
+        const api = `http://773a0e14c2c1.ngrok.io/api/answer` //adjust api
         await axios.post(api, {
             user_id: action.payload.userId,
             answers: action.payload.answers,

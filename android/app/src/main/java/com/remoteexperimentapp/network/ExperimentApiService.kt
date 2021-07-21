@@ -19,7 +19,7 @@ class ScreenStateInfo(
 
 private val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("http://9d8bfd4a0358.ngrok.io")
+        .baseUrl("http://773a0e14c2c1.ngrok.io")
         .build()
 
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TextInput } from 'react-native';
+import { AppState } from '../../../redux/types'
 import { validateForm } from '../../../redux/forms/forms.actions'
 import { setCurrentAnswer } from '../../../redux/currentAnswer/currentAnswer.actions'
 import CheckBox from '@react-native-community/checkbox';
@@ -11,9 +12,8 @@ interface DisturbedState {
 }
 
 
-export const BinaryOpenAnswer = (props: any) => {
+export const BinaryOpenAnswer = () => {
     const dispatch = useDispatch();
-    const currentAnswerState = useSelector(state => state.currentAnswerState)
     const [disturbed, setDisturbed] = useState<DisturbedState>({
         disturbed: undefined,
         notDisturbed: undefined
@@ -21,7 +21,7 @@ export const BinaryOpenAnswer = (props: any) => {
     const [input, setInput] = useState("")
 
     useEffect(() => {
-        if((disturbed.disturbed !== undefined || disturbed.notDisturbed !== undefined) &&  !currentAnswerState.validated) {
+        if(disturbed.disturbed !== undefined || disturbed.notDisturbed !== undefined) {
             dispatch(validateForm(true))
         } else {
             dispatch(validateForm(false))
@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderColor: 'black',
+        textAlignVertical: 'top',
         borderWidth: .5,
         borderRadius: 10,
-        textAlignVertical: 'top',
         flex: 10,
     },
     answer: {

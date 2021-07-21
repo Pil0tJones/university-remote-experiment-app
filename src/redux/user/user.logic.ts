@@ -7,7 +7,7 @@ export const createUserLogic = createLogic<UserState, UserRequestPayload>({
   type: UserActionTypes.CreationRequest,
   process: async ({ getState, action }, dispatch, done) => {
     try {
-      const api = `http://236e77569cae.ngrok.io/api/user/create-user`
+      const api = `http://773a0e14c2c1.ngrok.io/api/user/create-user`
       await axios.post(api, {
         id: action.payload.id,
         age: action.payload.age,

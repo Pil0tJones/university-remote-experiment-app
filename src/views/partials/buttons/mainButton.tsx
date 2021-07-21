@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 interface MainButtonProps {
     validated?: boolean;
     onPress: (() => void);
-    buttonText: string;
+    children: React.ReactNode;
 }
 
 export const MainButton = (props: MainButtonProps) => {
@@ -16,7 +16,7 @@ export const MainButton = (props: MainButtonProps) => {
                 onPress={props.onPress}
                 style={styles.button}>
                 <LinearGradient style={styles.gradient} colors={props.validated ? ['#e5e5e5', '#ADADAD'] : ['#38B0C0', '#27D6EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                    <Text style={styles.buttonText}>{props.buttonText}</Text>
+                    <Text style={styles.buttonText}>{props.children}</Text>
                 </LinearGradient>
             </TouchableOpacity>
         </View>

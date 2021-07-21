@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
+
 import { RootStackParamList } from '../../App'
 import { StackNavigationProp } from '@react-navigation/stack';
-import { View, Dimensions, StyleSheet, Alert, Text } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'VideoScreen'
->;
+import {CustomText} from './partials/textPartials/customText'
+import Messages from './messages/messages.de'
+import { View, Dimensions, StyleSheet, Alert } from 'react-native';
 
-type Props = {
-    navigation: ProfileScreenNavigationProp;
-  };
+//Navigation Props
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList,'VideoScreen'>;
+type Props = {navigation: ProfileScreenNavigationProp;};
 
 
 
@@ -48,7 +47,7 @@ export const VideoScreen = ({ navigation }:Props) => {
             />
             {!isFullScreen &&
                 <View style={styles.clue}>
-                    <Text>Bitte Vollbild Modus nutzen</Text>
+                    <CustomText>{Messages.useFullScreen}</CustomText>
                 </View>
             }
         </View>

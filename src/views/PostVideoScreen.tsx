@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { RootStackParamList } from '../../App'
+import Messages from './messages/messages.de'
 import { StackNavigationProp } from '@react-navigation/stack';
 import ReactNativeAN from 'react-native-alarm-notification';
 import BackgroundTimer from 'react-native-background-timer';
 import { NativeModules } from 'react-native';
 import Orientation from 'react-native-orientation';
-import { Headline } from './partials/headline/headline'
+import { Headline } from './partials/textPartials/headline'
 import { MainButton } from './partials/buttons/mainButton';
 import {
     StyleSheet,
@@ -13,19 +14,12 @@ import {
 } from 'react-native';
 
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'PostVideoScreen'
->;
-
-type Props = {
-    navigation: ProfileScreenNavigationProp;
-  };
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PostVideoScreen'>;
+type Props = { navigation: ProfileScreenNavigationProp; };
 
 
-export const PostVideoSreen = ({ navigation }:Props) => {
+export const PostVideoSreen = ({ navigation }: Props) => {
     const [disabled, setDisabled] = useState(true)
-
 
     useEffect(() => {
         Orientation.lockToPortrait();
@@ -38,7 +32,7 @@ export const PostVideoSreen = ({ navigation }:Props) => {
 
 
     const scheduleAlarm = async () => {
-        const fireDate = ReactNativeAN.parseDate(new Date(Date.now() + 60000));     // set the fire date for 1 second from now
+        const fireDate = ReactNativeAN.parseDate(new Date(Date.now() + 60000)); // set the fire date for 1 minute from now
         const alarmNotifData = {
             title: "Ihre Pause ist zu ende",
             message: "Bitte fahren Sie mit dem Experiment fort",
@@ -50,7 +44,7 @@ export const PostVideoSreen = ({ navigation }:Props) => {
         BackgroundTimer.setTimeout(() => {
             setDisabled(false)
         }, 60000);
-        
+
     }
 
 
@@ -59,17 +53,20 @@ export const PostVideoSreen = ({ navigation }:Props) => {
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
-                <Headline marginTop={50} fontSize={24} text={"Es gibt nun eine kurze Pause. Bitte nutzen Sie Ihr Smartphone, wie auch sonst, wenn Sie in einer Situation sind, in der Sie warten müssen. In Kürze ertönt dann ein Signalton. Dann geht es mit der Studie weiter."} />
+                <Headline marginTop={50} fontSize={24}>
+                    {Messages.postVideoText}
+                </Headline>
             </View>
             <MainButton
                 validated={disabled}
-                buttonText = "Weiter"
                 onPress={() => {
                     ReactNativeAN.stopAlarmSound();
                     ReactNativeAN.removeAllFiredNotifications();
                     NativeModules.ScreenListenerModule.stopScreenChangeService()
                     navigation.navigate('QuestionScreen')
-                }} />
+                }}>
+                {Messages.buttonWeiter}
+            </MainButton>
         </View>
     )
 }

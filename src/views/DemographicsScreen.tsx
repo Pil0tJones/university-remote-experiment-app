@@ -1,95 +1,62 @@
 import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/types';
-import { RootStackParamList } from '../../App'
-import { StackNavigationProp } from '@react-navigation/stack';
 import { UserState } from '../redux/user/user.types';
 import { userCreationRequest } from '../redux/user/user.actions'
+import { FormsState } from '../redux/forms/forms.types';
+import { CurrentAnswerState } from '../redux/currentAnswer/currentAnswer.types';
+
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import {MultipleChoice} from './partials/answers/multipleChoiceAnswer'
+import Messages from './messages/messages.de'
 import { MainButton } from './partials/buttons/mainButton'
-import { Headline } from './partials/headline/headline'
+import { Headline } from './partials/textPartials/headline'
 import InputSpinner from "react-native-input-spinner";
-import {
-    StyleSheet,
-    View,
-    Text,
-} from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'DemographicsScreen'
->;
 
-type Props = {
-    navigation: ProfileScreenNavigationProp;
-  };
+//Navigation Types
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DemographicsScreen'>;
+type Props = { navigation: ProfileScreenNavigationProp; };
+
 
 export const DemographicsScreen = ({ navigation }:Props) => {
     const dispatch = useDispatch();
-    const userState: UserState = useSelector((state: AppState) => state.userState)
-    const [genderMale, setGenderMale] = useState(false);
-    const [genderFemale, setGenderFemale] = useState(false);
-    const [genderOther, setGenderOther] = useState(false);
-    const [age, setAge] = useState(0);
-    const validated = ((genderMale === true || genderFemale === true || genderOther === true))
 
+    //States
+    const userState: UserState = useSelector((state: AppState) => state.userState)
+    const formState: FormsState = useSelector((state: AppState) => state.formsState)
+    const currentAnswerState: CurrentAnswerState = useSelector((state: AppState) => state.currentAnswerState)
+    const [age, setAge] = useState(20);
+
+    //onPress Handler to dispatch user creation
     const onPressHandler = () => {
         if (!userState.id) {
-            let gender = '';
-            if (genderMale) { gender = 'male' };
-            if (genderFemale) { gender = 'female' };
-            if (genderOther) { gender = 'other' };
             const userId = + new Date;
-            dispatch(userCreationRequest(userId.toString(), gender, age))
+            if (currentAnswerState.currentAnswer && typeof(currentAnswerState.currentAnswer) ==='string') {
+                dispatch(userCreationRequest(userId.toString(),currentAnswerState.currentAnswer , age))
+            }
         }
         navigation.navigate("QuestionScreen");
     }
 
-
-
     return (
         <View style={styles.container}>
             <View style={styles.contentWrapper}>
-            <Headline text="Bitte fülle folgende Felder aus" marginTop={25} fontSize={30} />  
+            <Headline marginTop={25} fontSize={24}>
+                {Messages.formFill}
+                </Headline>  
                 <View style={styles.questionContainer}>
                     <View style={styles.questionWrapper}>
-                        <Text style={styles.splashText}>
-                            Geschlecht
-                        </Text>
-                        <View style={styles.answersWrapper}>
-                            <View style={styles.answer}>
-                                <CheckBox value={genderMale} onValueChange={value => {
-                                    setGenderMale(() => !genderMale)
-                                    setGenderFemale(() => false)
-                                    setGenderOther(() => false)
-                                }}
-                                />
-                                <Text>Mann</Text>
-                            </View>
-                            <View style={styles.answer}>
-                                <CheckBox value={genderFemale} onValueChange={value => {
-                                    setGenderMale(() => false)
-                                    setGenderFemale(() => !genderFemale)
-                                    setGenderOther(() => false)
-                                }}
-                                />
-                                <Text>Frau</Text>
-                            </View>
-                            <View style={styles.answer}>
-                                <CheckBox value={genderOther} onValueChange={value => {
-                                    setGenderMale(() => false)
-                                    setGenderFemale(() => false)
-                                    setGenderOther(() => !genderOther)
-                                }}
-                                />
-                                <Text>Divers</Text>
-                            </View>
-                        </View>
+                        <MultipleChoice />
                     </View>
                     <View style={styles.questionWrapper}>
-                        <Text style={styles.splashText}>
-                            Alter
-                    </Text>
+                        <Headline fontSize={20} marginTop={0}>
+                            {Messages.age}
+                    </Headline>
                         <View style={styles.numericInput}>
                             <InputSpinner
                                 buttonStyle={{backgroundColor:"#38B0C0"}}
@@ -99,13 +66,15 @@ export const DemographicsScreen = ({ navigation }:Props) => {
                                 skin={"modern"}
                                 fontSize={16}
                                 value={age}
-                                onChange={(num:number) => setAge(num)}
+                                onChange={(num:number) => setAge(() => num)}
                             />
                         </View>
                     </View>
                 </View>
             </View>
-            <MainButton onPress={onPressHandler} buttonText={"Weiter"} validated={!validated}/>
+            <MainButton onPress={onPressHandler} validated={!formState.validated}>
+                {Messages.buttonWeiter}
+                </MainButton>
         </View>
     )
 }
@@ -118,7 +87,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 35
     },
     questionContainer:{
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         display: 'flex',
         flex: 1,
         marginBottom: 100
@@ -127,30 +96,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop: 50,
-        flex: 2.5,
+        flex: 1,
     },
     questionWrapper: {
         marginTop: 30
-    },
-    splashText: {
-        fontFamily: 'Poppins-SemiBold',
-        fontSize: 20,
-        color: '#002D40',
-        textAlign: 'center',
-        paddingBottom:15
-    },
-    answersWrapper: {
-        flexDirection: 'row',
-        alignContent: 'center',
-        paddingTop: 15
-    },
-    splashHeader: {
-        fontFamily: 'Poppins-SemiBold',
-        fontSize: 30,
-        color: '#002D40',
-        textAlign: 'center',
-        paddingBottom: 30
-
     },
     input: {
         borderWidth: 1,
@@ -161,11 +110,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         paddingTop: 20,
-    },
-    answer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 10
     },
 })
 

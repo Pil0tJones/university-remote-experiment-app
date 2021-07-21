@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+    StyleSheet,
+    View,
+    Text,
+} from 'react-native';
+
+import Messages from './messages/messages.de'
 import { RootStackParamList } from '../../App'
+
 import { StackNavigationProp } from '@react-navigation/stack';
 import { startTimer, clearTimer } from '../redux/timer/timer.actions';
 import { QuestionState } from '../redux/questions/questions.types';
@@ -9,40 +17,36 @@ import { trySendAnswer } from '../redux/answers/answers.actions'
 import { AppState } from '../redux/types';
 import { requestQuestion } from '../redux/questions/questions.actions'
 import { clearCurrentAnswer } from '../redux/currentAnswer/currentAnswer.actions';
+
 import { MainButton } from './partials/buttons/mainButton';
-import {
-    StyleSheet,
-    View,
-    Text,
-} from 'react-native';
-import { Likert4Answers, Likert5Answers } from './partials/answers/scaleAnswers'
-import { Headline } from './partials/headline/headline'
+import { LikertAnswers } from './partials/answers/likertAnswers'
+import { Headline } from './partials/textPartials/headline'
 import { OpenAnswer } from './partials/answers/openAnswer'
 import { BinaryOpenAnswer } from './partials/answers/binaryOpenAnswer'
 import { LoadingSpinner } from './partials/loadingSpinner/loadingSpinner'
 
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'QuestionScreen'
->;
-
-type Props = {
-    navigation: ProfileScreenNavigationProp;
-  };
+//Navigation Props
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'QuestionScreen'>;
+type Props = { navigation: ProfileScreenNavigationProp; };
 
 export const QuestionScreen = ({ navigation }: Props) => {
-    const disabled = !useSelector((state:AppState) => state.formsState.validated);
-    const questionState: QuestionState = useSelector((state:AppState) => state.questionState);
-    const userState: UserState = useSelector((state:AppState) => state.userState);
-    const currentAnswerState = useSelector((state:AppState) => state.currentAnswerState);
-    const answerState = useSelector((state:AppState) => state.answersState);
-    const timerState = useSelector((state:AppState) => state.timerState);
+
     const dispatch = useDispatch();
+
+    //States
+    const questionState: QuestionState = useSelector((state: AppState) => state.questionState);
+    const userState: UserState = useSelector((state: AppState) => state.userState);
+    const currentAnswerState = useSelector((state: AppState) => state.currentAnswerState);
+    const answerState = useSelector((state: AppState) => state.answersState);
+    const timerState = useSelector((state: AppState) => state.timerState);
+    const disabled = !useSelector((state: AppState) => state.formsState.validated);
+
+
 
     useEffect(() => {
         if (!questionState.loaded && !questionState.updating) {
-            dispatch(requestQuestion(41));
+            dispatch(requestQuestion(1));
         }
     }, [navigation])
 
@@ -50,7 +54,26 @@ export const QuestionScreen = ({ navigation }: Props) => {
         if (questionState.loaded) dispatch(startTimer());
     }, [questionState.loaded])
 
+
     const onPressHandler = (time: number) => {
+
+        sendUserAnswers(time);
+        clearAnswerAndTimer();
+
+
+        if (questionState.questionId && questionState.questionId < 59) {
+            dispatch(requestQuestion(questionState.questionId + 1));
+        } else {
+            navigation.navigate('ThankYouScreen');
+        }
+
+    }
+
+    /**
+    * Send User Answers to API
+    * @param time Current timestamp
+    */
+    const sendUserAnswers = (time: number) => {
         if (questionState.questionType === 'likert' || questionState.questionType === 'likert_affective') {
             dispatch(trySendAnswer(userState.id, [...answerState.answers, {
                 questionType: questionState.questionType,
@@ -68,14 +91,11 @@ export const QuestionScreen = ({ navigation }: Props) => {
                 answer: currentAnswerState.currentAnswer,
             }]))
         }
+    }
 
+    const clearAnswerAndTimer = () => {
         dispatch(clearCurrentAnswer());
         dispatch(clearTimer());
-        if (questionState.questionId && questionState.questionId < 59) {
-            dispatch(requestQuestion(questionState.questionId + 1));
-        } else {
-            navigation.navigate('ThankYouScreen');
-        }
     }
 
 
@@ -88,14 +108,16 @@ export const QuestionScreen = ({ navigation }: Props) => {
     if (questionState.loaded && questionState.error) {
         return (
             <View style={styles.errorContainer}>
-                <Headline text="Etwas ist schiefgelaufen, überprüfe deine Internetverbindung und versuche es nocheinmal" fontSize={20} marginTop={0} />
+                <Headline fontSize={20} marginTop={0}>
+                    {Messages.errorTryAgain}
+                </Headline>
                 <View style={styles.errorButton}>
                     <MainButton
-                        buttonText="Nochmal versuchen"
-                        validated={disabled}
                         onPress={() => {
                             dispatch(requestQuestion(questionState.questionId + 1))
-                        }} />
+                        }} >
+                        {Messages.tryAgainButton}
+                    </MainButton>
                 </View>
             </View>
         )
@@ -110,11 +132,8 @@ export const QuestionScreen = ({ navigation }: Props) => {
                 {questionState.questionType === 'open' && (
                     <OpenAnswer onPress={onPressHandler} />
                 )}
-                {(questionState.questionType === 'likert' || questionState.questionType === 'smartphone_usage') && (
-                    <Likert5Answers />
-                )}
-                {questionState.questionType === 'likert_affective' && (
-                    <Likert4Answers />
+                {(questionState.questionType === 'likert' || questionState.questionType === 'smartphone_usage' || questionState.questionType === 'likert_affective') && (
+                    <LikertAnswers />
                 )}
                 {questionState.questionType === 'binary_variant' && (
                     <BinaryOpenAnswer />
@@ -124,12 +143,13 @@ export const QuestionScreen = ({ navigation }: Props) => {
 
             <View style={styles.buttonContainer}>
                 <MainButton
-                    buttonText="Nächste Frage"
                     validated={disabled}
                     onPress={() => {
                         const now = Date.now()
                         onPressHandler(now);
-                    }} />
+                    }}>
+                    {Messages.nextQuestion}
+                </MainButton>
 
             </View>
         </View>

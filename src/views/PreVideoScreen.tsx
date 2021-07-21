@@ -1,22 +1,19 @@
 import React, {useEffect} from 'react';
-import { RootStackParamList } from '../../App'
-import { StackNavigationProp } from '@react-navigation/stack';
 import {
     StyleSheet,
     View,
-    Text
 } from 'react-native';
+
+import { RootStackParamList } from '../../App'
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import {CustomText} from './partials/textPartials/customText'
 import { MainButton } from './partials/buttons/mainButton';
+import Messages from './messages/messages.de'
 import Orientation from 'react-native-orientation';
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'PreVideoScreen'
->;
-
-type Props = {
-    navigation: ProfileScreenNavigationProp;
-  };
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList,'PreVideoScreen'>;
+type Props = {navigation: ProfileScreenNavigationProp;}
 
 export const PreVideoScreen = ({ navigation }:Props) => {
 
@@ -29,11 +26,13 @@ export const PreVideoScreen = ({ navigation }:Props) => {
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
-                <Text style={styles.preVideoHeader}>
-                    Ihnen wird nun ein Video gezeigt. Bitte schauen Sie es aufmerksam an. 
-                </Text>
+                <CustomText>
+                   {Messages.preVideoText}
+                </CustomText>
             </View>
-            <MainButton buttonText={"Video anschauen"} onPress={() => navigation.navigate("VideoScreen")} />
+            <MainButton onPress={() => navigation.navigate("VideoScreen")}>
+                {Messages.watchVideo}
+                </MainButton>
         </View>
     )
 }

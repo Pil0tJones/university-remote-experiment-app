@@ -1,48 +1,49 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import { RootStackParamList } from '../../App'
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NativeModules } from 'react-native';
-import { UserState } from '../redux/user/user.types';
-import { AppState } from '../redux/types';
 import {
     StyleSheet,
     View,
     Text,
     FlatList,
-    BackHandler
+    BackHandler,
+    NativeModules
 } from 'react-native';
-import { MainButton } from './partials/buttons/mainButton'
-import { Headline } from './partials/headline/headline'
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'PrivacyScreen'
->;
+import {useDispatch, useSelector} from 'react-redux';
+import { UserState } from '../redux/user/user.types';
+import { AppState } from '../redux/types';
 
-type Props = {
-    navigation: ProfileScreenNavigationProp;
-  };
+import { StackNavigationProp } from '@react-navigation/stack';
+import { MainButton } from './partials/buttons/mainButton';
+
+import Messages from './messages/messages.de';
+import { RootStackParamList } from '../../App';
+import { Headline } from './partials/textPartials/headline';
+
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList,'PrivacyScreen'>;
+
+type Props = {navigation: ProfileScreenNavigationProp;};
 
 
 
 export const PrivacyScreen = ({ navigation }:Props) => {
-    const dispatch = useDispatch();
     const userState: UserState = useSelector((state: AppState) => state.userState)
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true);
     }, [])
 
-    useEffect(() => {
-        if (userState.id) {
-            NativeModules.ScreenListenerModule.startScreenChangeService(userState.id);
-        }
-    }, [userState])
+    // MOVE THIS TO AFTER VIDEO
+    // useEffect(() => {
+    //     if (userState.id) {
+    //         NativeModules.ScreenListenerModule.startScreenChangeService(userState.id);
+    //     }
+    // }, [userState])
 
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
-                <Headline text="Während des Experiments sammelt die App anonymisiert folgende Daten" marginTop={50} fontSize={20} />
+                <Headline marginTop={50} fontSize={20}>
+                    {Messages.anonymusDataCollection}
+                    </Headline>
                 <FlatList
                     style={styles.list}
                     data={[
@@ -56,14 +57,15 @@ export const PrivacyScreen = ({ navigation }:Props) => {
             </View>
             <View style={styles.consentNoteContainer}>
                 <Text style={styles.consentNote}>
-                    Klicken Sie auf "Weiter", erklären Sie sich damit einverstanden, dass wir die oben genannten Daten erheben.
+                    {Messages.privacyNote}
                     </Text>
                 <MainButton
                     onPress={() => {
                         navigation.navigate('DemographicsScreen')
                     }}
-                    buttonText={"Weiter"}
-                />
+                >
+                    {Messages.buttonWeiter}
+                    </MainButton>
 
             </View>
         </View>

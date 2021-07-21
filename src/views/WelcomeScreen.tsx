@@ -1,27 +1,25 @@
 import React, { useEffect } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../App'
 import {
     StyleSheet,
     View,
-    Text,
     Image
 } from 'react-native';
+
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App'
+
+import Messages from './messages/messages.de'
 import Orientation from 'react-native-orientation';
 import { MainButton } from './partials/buttons/mainButton'
-import { Headline } from './partials/headline/headline'
+import { CustomText } from './partials/textPartials/customText'
+import { Headline } from './partials/textPartials/headline'
 
-type ProfileScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Intro'
->;
-
-type Props = {
-    navigation: ProfileScreenNavigationProp;
-  };
+//Navigation Props
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList,'Intro'>;
+type Props = { navigation: ProfileScreenNavigationProp; };
 
 
-export const    IntroScreen = ({ navigation }: Props) => {
+export const WelcomeScreen = ({ navigation }: Props) => {
 
     useEffect(() => {
         Orientation.lockToPortrait();
@@ -29,18 +27,22 @@ export const    IntroScreen = ({ navigation }: Props) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.textWrapper}>
+            <View style={styles.textContainer}>
                 <View>
                     <Image source={require("../assets/images/uni-potsdam-logo.png")} />
                 </View>
-                <Headline text="Willkommen zum 'Remote - Experiment'" marginTop={25} fontSize={30} />
+                <Headline marginTop={25} fontSize={30}>
+                    {Messages.welcomeHeader}
+                </Headline>
                 <View>
-                    <Text style={styles.splashText}>
-                        Auf dem folgenden Screen informieren wir Sie über die von uns gesammelten Daten und bitten Sie um Ihre Zustimmung.
-                    </Text>
+                    <CustomText style={{"paddingTop": 30}}>
+                        {Messages.welcomeText}
+                    </CustomText>
                 </View>
             </View>
-            <MainButton buttonText={"Weiter"} onPress={() => navigation.navigate("PrivacyScreen")} />
+            <MainButton onPress={() => navigation.navigate("OnboardingScreen")}>
+                {Messages.buttonWeiter}
+                </MainButton>
         </View>
     )
 }
@@ -52,15 +54,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginHorizontal: 35
     },
-    splashText: {
-        textAlign: 'center',
-        fontSize: 16,
-        lineHeight: 24,
-        color: '#80969F',
-        fontFamily: 'Poppins-Regular',
-        paddingTop: 40,
-    },
-    textWrapper: {
+    textContainer: {
         alignItems: 'center',
         justifyContent: 'flex-start',
         flex: 2.5,
