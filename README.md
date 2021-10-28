@@ -1,8 +1,8 @@
-# university-remote-experiment-app
+# Remote Experiment App on Emotional Clarity
 
 ## What is this project?
 
-This is a React-Native app that is used for remote-experiment on emotional clarity, through wich I collect data that I will use in master thesis.
+This is a React-Native app that is used for remote-experiment on emotional clarity, which is part of my master thesis project. Below is a quick summary of the project followed by a comprehensive guide how to deploy the application.
 
 Main features of the app:
   * Introduction
@@ -13,13 +13,18 @@ Main features of the app:
   * After a certain time there is a notification alarm
   * Participants answer various questions (open, multiple-choice, etc..), while the response time for every question is measured
 
-The goal is to find out if phone usage decreases emotional clarity (the controle group is not allowed to use their phone during the break).
-
 Technologies used:
   * React-Native
   * Redux (+ Redux Logic for asynchronous actions)
   * TypeScript
 
-You can find the REST API for this project here.
+### How to get the project running
 
-Pease note that there is a strict workflow for this experiment, the structure and architecture of this app is quite different compared to a 'regular' app and the UI is kept as simple as possible to rule out factors that influence the participants.
+If you want to reuse the app for further research, follow these steps:
+ * Replace all the API calls in the logic files in `src/redux` with the according link to your backend and start your backend (learn how to set up and start the backend [here](https://github.com/Pil0tJones/university-remote-experiment-rest))
+ * To start the app locally, please make sure you have followed all the steps to correctly set up the React-Native environment for Android (find all information [here](https://reactnative.dev/docs/environment-setup))
+ * If your environment is correctly set up, you can start the app locally with by running `react-native start` in one terminal and `react-native run-android` in another one
+
+### How to create an APK
+
+If you want to create an APK, open a terminal and navigate to `android` and run `./gradlew assembleRelease` for Mac/ Linux or `gradlew assembleRelease` from Windows. A comprehensive guide to creating APK's can be found [here](https://www.instamobile.io/android-development/generate-react-native-release-build-android/).
