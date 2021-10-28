@@ -23,7 +23,8 @@ Technologies used:
 If you want to reuse the app for further research, follow these steps:
  * Replace all the API calls in the logic files in `src/redux` with the according link to your backend and start your backend (learn how to set up and start the backend [here](https://github.com/Pil0tJones/university-remote-experiment-rest))
  * To start the app locally, please make sure you have followed all the steps to correctly set up the React-Native environment for Android (find all information [here](https://reactnative.dev/docs/environment-setup))
- * If your environment is correctly set up, you can start the app locally with by running `react-native start` in one terminal and `react-native run-android` in another one
+  * Run `npm install`
+  *  If your environment is correctly set up, you can start the app locally with by running `react-native start` in one terminal and `react-native run-android` in another one
 
 ### How to create an APK
 
